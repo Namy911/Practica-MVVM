@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Practica</string>
+    <string name="app_name"> Test Practica</string>
     <string name="msg_empty_list">List is empty</string>
     <string name="content_lorean">TextViewTextVie wTextViewTe xtViewT extViewTextVi \n ewText ViewTextVie \n wTextViewTextView</string>
     <string name="hint_title">title</string>
