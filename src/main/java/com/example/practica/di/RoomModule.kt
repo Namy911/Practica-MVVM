@@ -29,4 +29,8 @@ object RoomModule {
     @Provides
     fun provideRosterRepository(db: TaskDataBase) = db.userSore()
 
+    @Singleton
+    @Provides
+    fun provideUserAndArticleRepository(db: TaskDataBase) = db.userAndArticleSore()
+
 }

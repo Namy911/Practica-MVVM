@@ -9,12 +9,14 @@ import com.example.practica.data.db.TaskSchema.UserTable.Companion.TABLE_NAME
 import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.Category
 import com.example.practica.data.entity.User
+import com.example.practica.data.entity.UserAndArticle
 
 
 @Database(entities = [User::class, Article::class, Category::class], version = 1, exportSchema = false)
 abstract class TaskDataBase: RoomDatabase(){
 
     abstract fun userSore(): User.Store
+    abstract fun userAndArticleSore(): UserAndArticle.Store
 }
 
 class PrepopulateDatabase: RoomDatabase.Callback(){

@@ -9,6 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.practica.R
+import com.example.practica.data.entity.Article
+import com.example.practica.data.entity.User
+import com.example.practica.data.entity.UserAndArticle
+import com.example.practica.data.entity.UserAndArticleRef
 import com.example.practica.repository.RosterRepository
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,16 +23,14 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         fun newInstance() = MainFragment()
         private const val TAG = "MainFragment"
     }
+
     private val viewModel: MainViewModel by viewModels()
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.listUser.observe(viewLifecycleOwner){
-            Log.d(TAG, "onViewCreated: ${it.toMutableList()}")
+        viewModel.listUsersAndArticle.observe(viewLifecycleOwner) { item ->
+
         }
-
     }
-
-
 }
