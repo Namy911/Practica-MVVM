@@ -31,6 +31,14 @@ object RoomModule {
 
     @Singleton
     @Provides
+    fun provideArticleRepository(db: TaskDataBase) = db.articleSore()
+
+    @Singleton
+    @Provides
     fun provideUserAndArticleRepository(db: TaskDataBase) = db.userAndArticleSore()
+
+    @Singleton
+    @Provides
+    fun provideCategoryAndArticleRepository(db: TaskDataBase) = db.categoryAndArticleSore()
 
 }

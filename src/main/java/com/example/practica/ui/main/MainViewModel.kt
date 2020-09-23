@@ -3,13 +3,13 @@ package com.example.practica.ui.main
 import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.example.practica.data.entity.Article
+import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.data.entity.User
 import com.example.practica.data.entity.UserAndArticle
 import com.example.practica.repository.RosterRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -24,19 +24,43 @@ class MainViewModel @ViewModelInject constructor(
     private val _listUsersAndArticle: MutableLiveData<List<UserAndArticle>> by lazy { MutableLiveData<List<UserAndArticle>>() }
     val listUsersAndArticle = _listUsersAndArticle
 
+    private val _listCategoryAndArticle: MutableLiveData<List<CategoryAndArticle>> by lazy { MutableLiveData<List<CategoryAndArticle>>() }
+    val listCategoryAndArticle = _listCategoryAndArticle
+
+    var article: LiveData<Article> =  MediatorLiveData()
+    var articleToEdit: LiveData<CategoryAndArticle> =  MediatorLiveData()
+
     init {
         loadAll()
         loadUserAndArticleAll()
+        loadCategoryAndArticleAll()
     }
-    fun loadAll() {
+
+    // ********************
+    private fun loadAll() {
         viewModelScope.launch {
             rosterRepo.loadAll().collect {
-
                 _listUsers.value = it
             }
         }
     }
-    fun loadUserAndArticleAll() {
+
+    // Load 1 article(model:Article) by id
+    fun loadArticle(id : Int ) {
+        viewModelScope.launch {
+            article  =  rosterRepo.loadArticle(id)
+        }
+    }
+
+    // Load 1 article(model:CategoryAndArticle) by id
+    fun loadArticleToEdit(id: Int){
+        viewModelScope.launch {
+            articleToEdit = rosterRepo.loadArticleToEdit(id)
+        }
+    }
+
+    // CardView content on start app
+    private fun loadUserAndArticleAll() {
         viewModelScope.launch {
             rosterRepo.loadUserAndArticleAll().collect {
                 _listUsersAndArticle.value = setListUserArticles(it)
@@ -44,12 +68,36 @@ class MainViewModel @ViewModelInject constructor(
         }
     }
 
+    // ********************
+    private fun loadCategoryAndArticleAll() {
+        viewModelScope.launch {
+            rosterRepo.loadCategoryAndArticle().collect {
+                _listCategoryAndArticle.value = setListCategoryArticles(it)
+            }
+        }
+    }
+
+    // Create correct list 1:1 (user:article)
     private fun setListUserArticles(item: List<UserAndArticle>): MutableList<UserAndArticle> {
-        var result = mutableListOf<UserAndArticle>()
+        val result = mutableListOf<UserAndArticle>()
         item.forEach {
             if (it.article.size != 1) {
                 for (element in it.article) {
                     result.add(UserAndArticle(it.user, listOf(element)))
+                }
+            }
+        }
+        result.addAll(item.filter { it.article.size == 1 })
+        return result
+    }
+
+    // Create correct list 1:1 (category:article)
+    private fun setListCategoryArticles(item: List<CategoryAndArticle>): MutableList<CategoryAndArticle> {
+        val result = mutableListOf<CategoryAndArticle>()
+        item.forEach {
+            if (it.article.size != 1) {
+                for (element in it.article) {
+                    result.add(CategoryAndArticle(it.category, listOf(element)))
                 }
             }
         }

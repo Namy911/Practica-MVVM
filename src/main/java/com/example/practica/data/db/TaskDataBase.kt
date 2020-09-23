@@ -6,17 +6,16 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.practica.data.db.TaskSchema.UserTable.Companion.ROW_AGE
 import com.example.practica.data.db.TaskSchema.UserTable.Companion.ROW_NAME
 import com.example.practica.data.db.TaskSchema.UserTable.Companion.TABLE_NAME
-import com.example.practica.data.entity.Article
-import com.example.practica.data.entity.Category
-import com.example.practica.data.entity.User
-import com.example.practica.data.entity.UserAndArticle
+import com.example.practica.data.entity.*
 
 
 @Database(entities = [User::class, Article::class, Category::class], version = 1, exportSchema = false)
 abstract class TaskDataBase: RoomDatabase(){
 
     abstract fun userSore(): User.Store
+    abstract fun articleSore(): Article.Store
     abstract fun userAndArticleSore(): UserAndArticle.Store
+    abstract fun categoryAndArticleSore(): CategoryAndArticle.Store
 }
 
 class PrepopulateDatabase: RoomDatabase.Callback(){

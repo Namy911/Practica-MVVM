@@ -1,6 +1,7 @@
 package com.example.practica.data.entity
 
 import android.os.Parcelable
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.practica.data.db.TaskSchema
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_CATEGORY_ID
@@ -11,6 +12,7 @@ import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_TITLE
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_USER_ID
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.TABLE_NAME
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.flow.Flow
 
 @Entity(
     tableName = TABLE_NAME,
@@ -54,8 +56,13 @@ data class Article(
     @Dao
     interface Store{
 
-        @Insert
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun save(article: Article)
+
+        @Query("SELECT * FROM `articles` WHERE `art_id` = :id")
+        fun loadArticle(id: Int ): LiveData<Article>
+
+
 
     }
 }

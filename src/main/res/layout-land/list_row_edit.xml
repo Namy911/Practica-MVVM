@@ -15,8 +15,10 @@
 
         <ImageView
             android:id="@+id/img_select"
-            android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -26,92 +28,80 @@
 
         <EditText
             android:id="@+id/edt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="9"
+            android:gravity="center"
+            android:inputType="textPersonName"
+            android:text="@{model.article[0].title}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_select"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:ems="9"
-            android:gravity="center"
-            android:text="@{model.article[0].title}"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_select" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/edt_title"
-            tools:layout_editor_absoluteX="-25dp">
-
-            <Button
-                android:id="@+id/btn_category"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
-                android:textSize="12sp"
-                android:layout_weight="1"
-                android:text="@{model.category.name}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_title" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/img_select"
+            app:layout_constraintTop_toBottomOf="@+id/edt_desc">
 
             <Button
                 android:id="@+id/btn_image"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:textSize="12sp"
                 android:text="@string/btn_select_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_category"
-                app:layout_constraintTop_toBottomOf="@+id/edt_title" />
+                android:textSize="12sp"
+                tools:layout_marginEnd="16dp" />
+
+            <Button
+                android:id="@+id/btn_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="@{model.category.name}"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <EditText
             android:id="@+id/edt_desc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:text="@{model.article[0].desc}"
             android:lines="3"
+            android:text="@{model.article[0].desc}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+            app:layout_constraintStart_toEndOf="@+id/img_select"
+            app:layout_constraintTop_toBottomOf="@+id/edt_title" />
 
         <EditText
             android:id="@+id/edt_content"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
             android:gravity="start|top"
             android:hint="@string/app_name"
-            android:text="@{model.article[0].content}"
             android:inputType="textMultiLine"
+            android:text="@{model.article[0].content}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_desc" />
+            app:layout_constraintTop_toBottomOf="@+id/img_select" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
