@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practica.R
+import com.example.practica.data.entity.Article
+import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.data.entity.UserAndArticle
 import com.example.practica.databinding.ListRowBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,9 +31,10 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = RosterAdapter(){id ->
+        val adapter = RosterAdapter(){
             activity?.supportFragmentManager?.commit {
-                replace(R.id.container, EditArticleFragment.newInstance(id))
+//                replace(R.id.container, EditArticleFragment.newInstance(id))
+                replace(R.id.container, DisplayArticleFragment.newInstance(it))
             }
         }
         list_container.apply {
@@ -47,11 +50,11 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         fb_add_article.setOnClickListener {
             activity?.supportFragmentManager?.commit {
-//                replace(R.id.container, EditArticleFragment.newInstance())
+                replace(R.id.container, EditArticleFragment.newInstance(null))
             }
         }
     }
-    inner class RosterAdapter(private val action: (id: Int)-> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
+    inner class RosterAdapter(private val action: (articleId: Int) -> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RosterHolder {
             return RosterHolder(ListRowBinding.inflate(layoutInflater, parent, false),action)
         }
@@ -71,7 +74,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             oldItem == newItem
 
     }
-    inner class RosterHolder(private val binding: ListRowBinding, val action: (id: Int) -> Unit): RecyclerView.ViewHolder(binding.root){
+    inner class RosterHolder(private val binding: ListRowBinding, val action: (articleId: Int) -> Unit): RecyclerView.ViewHolder(binding.root){
             fun bind(model: UserAndArticle){
                 binding.model = model
                 binding.holder = this
