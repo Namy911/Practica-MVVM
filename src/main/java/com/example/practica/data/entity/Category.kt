@@ -22,7 +22,5 @@ data class Category(
     var id: Int = 0
 ) : Parcelable {
     @Dao
-    interface Store{
-
-    }
+    interface Store{}
 }

@@ -33,7 +33,6 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         val adapter = RosterAdapter(){
             activity?.supportFragmentManager?.commit {
-//                replace(R.id.container, EditArticleFragment.newInstance(id))
                 replace(R.id.container, DisplayArticleFragment.newInstance(it))
             }
         }

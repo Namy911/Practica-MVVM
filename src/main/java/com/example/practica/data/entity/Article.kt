@@ -59,9 +59,14 @@ data class Article(
         @Insert(onConflict = OnConflictStrategy.REPLACE)
         suspend fun save(article: Article)
 
+        @Update(onConflict = OnConflictStrategy.REPLACE)
+        suspend fun update(article: Article)
+
+        @Delete
+        suspend fun delete(article: Article)
+
         @Query("SELECT * FROM `articles` WHERE `art_id` = :id")
         fun loadArticle(id: Int ): LiveData<Article>
-
 
 
     }

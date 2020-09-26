@@ -39,5 +39,17 @@ data class CategoryAndArticle (
         @Transaction
         @Query("SELECT * FROM $TABLE_NAME WHERE ${CategoryTable.ROW_ID} = :id")
         fun loadArticleToEdit(id: Int): LiveData<CategoryAndArticle>
+
+//        @Insert(onConflict = OnConflictStrategy.REPLACE)
+//        suspend fun _saveArticle(article: Article)
+//
+//        @Insert(onConflict = OnConflictStrategy.REPLACE)
+//        suspend fun _saveCategory(category: Category)
+//
+//        @Transaction
+//        suspend fun saveCategoryAndArticle(article: Article, category: Category){
+//            _saveCategory(category)
+//            _saveArticle(article)
+//        }
     }
 }

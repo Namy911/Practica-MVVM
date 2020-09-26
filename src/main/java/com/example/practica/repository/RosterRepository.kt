@@ -16,6 +16,10 @@ class RosterRepository @Inject constructor(
     fun loadAll() =
         storeUser.loadAllDistinct()
 
+    // Insert Article
+    suspend fun saveArticle(article: Article) =
+        storeArticle.save(article)
+
     // CardView content on start app
     fun loadUserAndArticleAll() =
         storeUserArticle.loadAllDistinct()

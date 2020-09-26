@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.practica.ui.main.MainFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.list_row_edit.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {

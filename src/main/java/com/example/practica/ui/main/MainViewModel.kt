@@ -1,6 +1,5 @@
 package com.example.practica.ui.main
 
-import android.util.Log
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
@@ -9,7 +8,6 @@ import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.data.entity.User
 import com.example.practica.data.entity.UserAndArticle
 import com.example.practica.repository.RosterRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -32,8 +30,8 @@ class MainViewModel @ViewModelInject constructor(
 
     init {
         loadAll()
-        loadUserAndArticleAll()
-        loadCategoryAndArticleAll()
+        loadAllUserAndArticle()
+        loadAllCategoryAndArticle()
     }
 
     // ********************
@@ -42,6 +40,13 @@ class MainViewModel @ViewModelInject constructor(
             rosterRepo.loadAll().collect {
                 _listUsers.value = it
             }
+        }
+    }
+
+    // Insert Article
+    fun saveArticle(article: Article){
+        viewModelScope.launch {
+            rosterRepo.saveArticle(article)
         }
     }
 
@@ -60,7 +65,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     // CardView content on start app
-    private fun loadUserAndArticleAll() {
+    private fun loadAllUserAndArticle() {
         viewModelScope.launch {
             rosterRepo.loadUserAndArticleAll().collect {
                 _listUsersAndArticle.value = setListUserArticles(it)
@@ -69,7 +74,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     // ********************
-    private fun loadCategoryAndArticleAll() {
+    private fun loadAllCategoryAndArticle() {
         viewModelScope.launch {
             rosterRepo.loadCategoryAndArticle().collect {
                 _listCategoryAndArticle.value = setListCategoryArticles(it)

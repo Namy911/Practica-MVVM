@@ -7,16 +7,22 @@
         <variable
             name="model"
             type="com.example.practica.data.entity.CategoryAndArticle" />
+
+        <variable
+            name="callback"
+            type="com.example.practica.ui.main.EditArticleFragment" />
     </data>
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/img_select"
             android:layout_width="0dp"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -29,12 +35,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="9"
             android:gravity="center"
-            android:text="@{model.article[0].title}"
+            android:hint="@string/hint_title"
             android:inputType="textPersonName"
+            android:text="@{model.article[0].title}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +51,11 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@+id/edt_title"
-            tools:layout_editor_absoluteX="-25dp">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edt_title">
 
             <Button
                 android:id="@+id/btn_category"
@@ -56,9 +64,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:textSize="12sp"
                 android:layout_weight="1"
                 android:text="@{(model != null) ? model.category.name : @string/btn_select_category}"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_title" />
@@ -71,8 +79,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:textSize="12sp"
                 android:text="@string/btn_select_image"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_category"
                 app:layout_constraintTop_toBottomOf="@+id/edt_title" />
@@ -83,13 +91,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:gravity="start|top"
+            android:hint="desc"
             android:inputType="textMultiLine"
+            android:lines="2"
             android:text="@{model.article[0].desc}"
-            android:lines="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -97,22 +106,30 @@
 
         <EditText
             android:id="@+id/edt_content"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ems="10"
             android:gravity="start|top"
             android:hint="@string/app_name"
-            android:text="@{model.article[0].content}"
             android:inputType="textMultiLine"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@{model.article[0].content}"
+            app:layout_constraintBottom_toTopOf="@+id/bott_nav"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_desc" />
 
-
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bott_nav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/container"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_menu_save" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
