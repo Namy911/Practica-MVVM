@@ -14,6 +14,7 @@ abstract class TaskDataBase: RoomDatabase(){
 
     abstract fun userSore(): User.Store
     abstract fun articleSore(): Article.Store
+    abstract fun categorySore(): Category.Store
     abstract fun userAndArticleSore(): UserAndArticle.Store
     abstract fun categoryAndArticleSore(): CategoryAndArticle.Store
 }

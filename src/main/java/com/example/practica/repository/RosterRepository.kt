@@ -1,20 +1,18 @@
 package com.example.practica.repository
 
-import com.example.practica.data.entity.Article
-import com.example.practica.data.entity.CategoryAndArticle
-import com.example.practica.data.entity.User
-import com.example.practica.data.entity.UserAndArticle
+import com.example.practica.data.entity.*
 import javax.inject.Inject
 
 class RosterRepository @Inject constructor(
     private val storeUser: User.Store,
     private val storeArticle: Article.Store,
-    private val storeCategory: CategoryAndArticle.Store,
+    private val storeCategory: Category.Store,
+    private val storeCategoryArticle: CategoryAndArticle.Store,
     private val storeUserArticle: UserAndArticle.Store) {
 
-    // ********************
-    fun loadAll() =
-        storeUser.loadAllDistinct()
+    // Load all categories from dialog(select category on insert/update)
+    fun loadAllCategories() =
+        storeCategory.loadAllDistinct()
 
     // Insert Article
     suspend fun saveArticle(article: Article) =
@@ -26,7 +24,7 @@ class RosterRepository @Inject constructor(
 
     // Load all articles by category
     fun loadCategoryAndArticle() =
-        storeCategory.loadAllDistinct()
+        storeCategoryArticle.loadAllDistinct()
 
     // Load 1 article(model:Article) by id
     fun loadArticle(id: Int) =
@@ -34,6 +32,6 @@ class RosterRepository @Inject constructor(
 
     // Load 1 article(model:CategoryAndArticle) by id
     fun loadArticleToEdit(id: Int) =
-        storeCategory.loadArticleToEdit(id)
+        storeCategoryArticle.loadArticleToEdit(id)
 
 }

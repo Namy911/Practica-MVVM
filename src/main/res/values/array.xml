@@ -5,4 +5,10 @@
         <item>GGGG 2</item>
         <item>GGGG 4</item>
     </string-array>
+
+    <array name="dialog2">
+        <item>hhh</item>
+        <item>hhh</item>
+        <item>hhh</item>
+    </array>
 </resources>

@@ -3,10 +3,7 @@ package com.example.practica.ui.main
 import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
-import com.example.practica.data.entity.Article
-import com.example.practica.data.entity.CategoryAndArticle
-import com.example.practica.data.entity.User
-import com.example.practica.data.entity.UserAndArticle
+import com.example.practica.data.entity.*
 import com.example.practica.repository.RosterRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -16,9 +13,6 @@ class MainViewModel @ViewModelInject constructor(
     @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val _listUsers: MutableLiveData<List<User>> by lazy { MutableLiveData<List<User>>() }
-    val listUser = _listUsers
-
     private val _listUsersAndArticle: MutableLiveData<List<UserAndArticle>> by lazy { MutableLiveData<List<UserAndArticle>>() }
     val listUsersAndArticle = _listUsersAndArticle
 
@@ -26,19 +20,22 @@ class MainViewModel @ViewModelInject constructor(
     val listCategoryAndArticle = _listCategoryAndArticle
 
     var article: LiveData<Article> =  MediatorLiveData()
+
     var articleToEdit: LiveData<CategoryAndArticle> =  MediatorLiveData()
+    private val _categories: MutableLiveData<List<Category>>  by lazy { MutableLiveData<List<Category>>() }
+     val categories = _categories
 
     init {
-        loadAll()
+        loadAllCategories()
         loadAllUserAndArticle()
         loadAllCategoryAndArticle()
     }
 
-    // ********************
-    private fun loadAll() {
+    // Load all categories from dialog(select category on insert/update)
+    private fun loadAllCategories() {
         viewModelScope.launch {
-            rosterRepo.loadAll().collect {
-                _listUsers.value = it
+             rosterRepo.loadAllCategories().collect{
+                 _categories.value = it
             }
         }
     }
