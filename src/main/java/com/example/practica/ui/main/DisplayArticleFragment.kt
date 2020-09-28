@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import com.example.practica.R
 import com.example.practica.databinding.DispayRowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,8 +34,20 @@ class DisplayArticleFragment: Fragment() {
         viewModel.loadArticleToEdit(articleId)
         viewModel.articleToEdit.observe(viewLifecycleOwner, { binding.model = it })
 
+        binding.botNavDisplay.setOnNavigationItemSelectedListener{ item ->
+            when(item.itemId){
+                R.id.bot_menu_update -> {updateArticle(); true}
+                R.id.bot_menu_delete -> {true}
+                else -> { false}
+            }
+
+        }
+
     }
 
-
-
+    private fun updateArticle(){
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.container, EditArticleFragment.newInstance(binding.model!!.article[0].id, binding.model!!.category))
+        }
+    }
 }

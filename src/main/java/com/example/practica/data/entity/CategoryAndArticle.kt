@@ -1,15 +1,17 @@
 package com.example.practica.data.entity
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.practica.data.db.TaskSchema
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_CATEGORY_ID
 import com.example.practica.data.db.TaskSchema.CategoryTable
 import com.example.practica.data.db.TaskSchema.CategoryTable.Companion.TABLE_NAME
+import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 
-
+@Parcelize
 data class CategoryAndArticle (
     @Embedded val category: Category,
     @Relation(
@@ -18,7 +20,7 @@ data class CategoryAndArticle (
         entity = Article::class
     )
     val article: List<Article> = listOf()
-){
+) : Parcelable {
     @Dao
     interface Store{
 

@@ -49,7 +49,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         fb_add_article.setOnClickListener {
             activity?.supportFragmentManager?.commit {
-                replace(R.id.container, EditArticleFragment.newInstance(null))
+                replace(R.id.container, EditArticleFragment.newInstance(null, null))
             }
         }
     }
