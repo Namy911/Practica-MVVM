@@ -52,21 +52,20 @@
 
             <Button
                 android:id="@+id/btn_image"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_select_image"
                 android:textSize="12sp"
                 tools:layout_marginEnd="16dp" />
 
-            <Button
-                android:id="@+id/btn_category"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/spin_category"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:text="@{model.category.name}"
-                android:textSize="12sp" />
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
         <EditText

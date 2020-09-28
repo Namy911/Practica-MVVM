@@ -57,19 +57,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_title">
 
-            <Button
-                android:id="@+id/btn_category"
+            <Spinner
+                android:id="@+id/spin_category"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_marginTop="6dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:text="@{(model != null) ? model.category.name : @string/btn_select_category}"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edt_title" />
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btn_image"
@@ -80,10 +75,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:text="@string/btn_select_image"
-                android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_category"
-                app:layout_constraintTop_toBottomOf="@+id/edt_title" />
+                android:textSize="12sp"/>
         </LinearLayout>
 
         <EditText
