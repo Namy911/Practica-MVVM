@@ -49,11 +49,11 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
         fb_add_article.setOnClickListener {
             activity?.supportFragmentManager?.commit {
-                replace(R.id.container, EditArticleFragment.newInstance(null, null))
+                replace(R.id.container, EditArticleFragment.newInstance(null))
             }
         }
     }
-    inner class RosterAdapter(private val action: (articleId: Int) -> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
+    inner class RosterAdapter(private val action: (Article) -> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RosterHolder {
             return RosterHolder(ListRowBinding.inflate(layoutInflater, parent, false),action)
         }
@@ -73,7 +73,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             oldItem == newItem
 
     }
-    inner class RosterHolder(private val binding: ListRowBinding, val action: (articleId: Int) -> Unit): RecyclerView.ViewHolder(binding.root){
+    inner class RosterHolder(private val binding: ListRowBinding, val action: (Article) -> Unit): RecyclerView.ViewHolder(binding.root){
             fun bind(model: UserAndArticle){
                 binding.model = model
                 binding.holder = this

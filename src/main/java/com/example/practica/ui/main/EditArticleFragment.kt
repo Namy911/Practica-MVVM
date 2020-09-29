@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import com.example.practica.R
 import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.Category
+import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.ListRowEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
@@ -26,15 +27,15 @@ import kotlinx.android.synthetic.main.sppiner_row_category.view.*
 class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     companion object {
         private const val TAG = "EditArticleFragment"
-        private const val MODEL_CATEGORY = "ui.main.model.category"
+        private const val MODEL_CATEGORY_ARTICLE = "ui.main.model.category.article"
         private const val ARTICLE_ID = "ui.mai.article.id"
 
-        fun newInstance(articleId: Int?, category_model: Category?) = EditArticleFragment().apply {
-            arguments = bundleOf(ARTICLE_ID to articleId, MODEL_CATEGORY to category_model)
+        fun newInstance(model: CategoryAndArticle?) = EditArticleFragment().apply {
+            arguments = bundleOf(MODEL_CATEGORY_ARTICLE  to model)
         }
     }
 
-    private var articleId: Int = -1
+    private var model: CategoryAndArticle? = null
     private lateinit var category: Category
 
     private lateinit var binding: ListRowEditBinding
@@ -51,26 +52,23 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        model = arguments?.getParcelable(MODEL_CATEGORY_ARTICLE)
 
         // Set spinner with all categories
         viewModel.categories.observe(viewLifecycleOwner) { list ->
             binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
             // Select category from article lis
-            val pos = list.indexOf(requireArguments().getParcelable<Category>(MODEL_CATEGORY))
-            binding.spinCategory.setSelection(pos)
+            if (model != null) {
+                val pos = list.indexOf(model?.category)
+                binding.spinCategory.setSelection(pos)
+            }
 
         }
         binding.spinCategory.onItemSelectedListener = this
 
         // Set article data from update View: name, title, desc, image
         // If model exist display  update View, else insert View
-        if (binding.model == null) {
-            articleId = requireArguments().getInt(ARTICLE_ID, -1)
-            viewModel.loadArticleToEdit(articleId)
-            viewModel.articleToEdit.observe(
-                viewLifecycleOwner, { binding.model = it }
-            )
-        }
+        if (model != null) { binding.model = model }
 
         // Select image
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

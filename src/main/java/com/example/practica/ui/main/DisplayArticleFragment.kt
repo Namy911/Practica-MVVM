@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.practica.R
+import com.example.practica.data.entity.Article
+import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.DispayRowBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,9 +19,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
 
     companion object {
-        const val ARTICLE_ID = "ui.main.article.id"
-        fun newInstance(articleId: Int) = DisplayArticleFragment()
-            .apply { arguments = bundleOf(ARTICLE_ID to articleId) }
+        const val ARTICLE_MODEL = "ui.main.article.model"
+        const val CATEGORY_ID = "ui.main.category.id"
+
+        fun newInstance(article: Article) = DisplayArticleFragment()
+            .apply { arguments = bundleOf(ARTICLE_MODEL to article) }
     }
     lateinit var binding: DispayRowBinding
     private val viewModel: MainViewModel by viewModels()
@@ -31,9 +35,10 @@ class DisplayArticleFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val articleId = requireArguments().getInt(ARTICLE_ID)
-        viewModel.loadArticleToEdit(articleId)
-        viewModel.articleToEdit.observe(viewLifecycleOwner, { binding.model = it })
+
+        val article = requireArguments().getParcelable<Article>(ARTICLE_MODEL)
+        viewModel.laodCategory(article!!.categoryId)
+        viewModel.category.observe(viewLifecycleOwner, { binding.model = CategoryAndArticle(it, listOf(article)) })
 
         binding.botNavDisplay.setOnNavigationItemSelectedListener{ item ->
             when(item.itemId){
@@ -47,7 +52,6 @@ class DisplayArticleFragment: Fragment() {
     }
     // Delete an redirect to main screen
     private fun deleteArticle(){
-        val article = binding.model!!.article[0]
         viewModel.deleteArticle(binding.model!!.article[0])
         Toast.makeText(context, "deleted", Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.commit {
@@ -57,7 +61,7 @@ class DisplayArticleFragment: Fragment() {
 
     private fun updateArticle(){
         requireActivity().supportFragmentManager.commit {
-            replace(R.id.container, EditArticleFragment.newInstance(binding.model!!.article[0].id, binding.model!!.category))
+            replace(R.id.container, EditArticleFragment.newInstance(binding.model!!))
         }
     }
 }

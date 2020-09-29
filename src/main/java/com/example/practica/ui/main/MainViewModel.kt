@@ -20,6 +20,7 @@ class MainViewModel @ViewModelInject constructor(
     val listCategoryAndArticle = _listCategoryAndArticle
 
     var article: LiveData<Article> =  MediatorLiveData()
+    var category: LiveData<Category> =  MediatorLiveData()
 
     var articleToEdit: LiveData<CategoryAndArticle> =  MediatorLiveData()
     private val _categories: MutableLiveData<List<Category>>  by lazy { MutableLiveData<List<Category>>() }
@@ -37,6 +38,12 @@ class MainViewModel @ViewModelInject constructor(
              rosterRepo.loadAllCategories().collect{
                  _categories.value = it
             }
+        }
+    }
+
+    fun laodCategory(id: Int){
+        viewModelScope.launch {
+            category = rosterRepo.loadCategory(id)
         }
     }
 

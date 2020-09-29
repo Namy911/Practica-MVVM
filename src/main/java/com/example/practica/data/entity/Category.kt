@@ -32,5 +32,9 @@ data class Category(
 
         fun loadAllDistinct() =
             loadAll().distinctUntilChanged()
+
+        @Query("SELECT * FROM $TABLE_NAME WHERE _id = :id LIMIT 1")
+        fun loadCategory(id: Int): LiveData<Category>
+
     }
 }

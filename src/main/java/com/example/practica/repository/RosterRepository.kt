@@ -13,6 +13,8 @@ class RosterRepository @Inject constructor(
     fun loadAllCategories() =
         storeCategory.loadAllDistinct()
 
+    fun loadCategory(id: Int) =
+        storeCategory.loadCategory(id)
 
     suspend fun saveArticle(article: Article) =
         storeArticle.save(article)
