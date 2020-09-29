@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import com.example.practica.R
 import com.example.practica.data.entity.Article
@@ -25,17 +26,17 @@ import kotlinx.android.synthetic.main.sppiner_row_category.view.*
 class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     companion object {
         private const val TAG = "EditArticleFragment"
-        private const val CATEGORY = "ui.main.category"
+        private const val MODEL_CATEGORY = "ui.main.model.category"
         private const val ARTICLE_ID = "ui.mai.article.id"
 
         fun newInstance(articleId: Int?, category_model: Category?) = EditArticleFragment().apply {
-            arguments = bundleOf(ARTICLE_ID to articleId, CATEGORY to category_model)
+            arguments = bundleOf(ARTICLE_ID to articleId, MODEL_CATEGORY to category_model)
         }
     }
 
     private var articleId: Int = -1
     private lateinit var category: Category
-    private var catSelectedPos = -1
+
     private lateinit var binding: ListRowEditBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -55,7 +56,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         viewModel.categories.observe(viewLifecycleOwner) { list ->
             binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
             // Select category from article lis
-            val pos = list.indexOf(requireArguments().getParcelable<Category>(CATEGORY))
+            val pos = list.indexOf(requireArguments().getParcelable<Category>(MODEL_CATEGORY))
             binding.spinCategory.setSelection(pos)
 
         }
@@ -71,15 +72,21 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
         }
 
+        // Select image
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 binding.imgSelect.setImageURI(uri)
             }
         binding.btnImage.setOnClickListener { getContent.launch("image/*") }
 
+        // Bottom navigation save and redirect, save an clear input to add new article
         binding.bottNav?.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bot_menu_save -> {
-                    viewModel.saveArticle(getArticle()); true
+                    viewModel.saveArticle(getArticle());
+                    requireActivity().supportFragmentManager.commit {
+                        replace(R.id.container, MainFragment.newInstance())
+                    }
+                    true
                 }
                 R.id.bot_menu_save_new -> {
                     Log.d(TAG, "onViewCreated: ${getArticle()}"); true
@@ -91,12 +98,14 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
+    // Setup Article model
     private fun getArticle() = Article(
         binding.edtTitle.text.toString(),
         binding.edtDesc.text.toString(),
         binding.edtContent.text.toString(),
         1,
-        category.id
+        category.id,
+        binding.model!!.article[0].id
     )
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {

@@ -46,6 +46,11 @@ class MainViewModel @ViewModelInject constructor(
             rosterRepo.saveArticle(article)
         }
     }
+    fun deleteArticle(article: Article){
+        viewModelScope.launch {
+            rosterRepo.deleteArticle(article)
+        }
+    }
 
     // Load 1 article(model:Article) by id
     fun loadArticle(id : Int ) {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -16,12 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
 
     companion object {
-        const val CATEGORY_ARTICLE = "ui.main.article"
+        const val ARTICLE_ID = "ui.main.article.id"
         fun newInstance(articleId: Int) = DisplayArticleFragment()
-            .apply { arguments = bundleOf(CATEGORY_ARTICLE to articleId) }
+            .apply { arguments = bundleOf(ARTICLE_ID to articleId) }
     }
     lateinit var binding: DispayRowBinding
-    val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         DispayRowBinding.inflate(inflater, container, false)
@@ -30,19 +31,28 @@ class DisplayArticleFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val articleId = requireArguments().getInt(CATEGORY_ARTICLE)
+        val articleId = requireArguments().getInt(ARTICLE_ID)
         viewModel.loadArticleToEdit(articleId)
         viewModel.articleToEdit.observe(viewLifecycleOwner, { binding.model = it })
 
         binding.botNavDisplay.setOnNavigationItemSelectedListener{ item ->
             when(item.itemId){
                 R.id.bot_menu_update -> {updateArticle(); true}
-                R.id.bot_menu_delete -> {true}
+                R.id.bot_menu_delete -> {deleteArticle(); true}
                 else -> { false}
             }
 
         }
 
+    }
+    // Delete an redirect to main screen
+    private fun deleteArticle(){
+        val article = binding.model!!.article[0]
+        viewModel.deleteArticle(binding.model!!.article[0])
+        Toast.makeText(context, "deleted", Toast.LENGTH_SHORT).show()
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.container, MainFragment.newInstance())
+        }
     }
 
     private fun updateArticle(){

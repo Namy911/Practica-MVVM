@@ -4,7 +4,6 @@ import com.example.practica.data.entity.*
 import javax.inject.Inject
 
 class RosterRepository @Inject constructor(
-    private val storeUser: User.Store,
     private val storeArticle: Article.Store,
     private val storeCategory: Category.Store,
     private val storeCategoryArticle: CategoryAndArticle.Store,
@@ -14,9 +13,12 @@ class RosterRepository @Inject constructor(
     fun loadAllCategories() =
         storeCategory.loadAllDistinct()
 
-    // Insert Article
+
     suspend fun saveArticle(article: Article) =
         storeArticle.save(article)
+
+    suspend fun deleteArticle(article: Article) =
+        storeArticle.delete(article)
 
     // CardView content on start app
     fun loadUserAndArticleAll() =

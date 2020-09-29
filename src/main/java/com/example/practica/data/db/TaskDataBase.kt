@@ -40,6 +40,7 @@ class PrepopulateDatabase: RoomDatabase.Callback(){
             VALUES ("Articles1 DESC", "Articles1 Content 1", "Articles1 Title", 1, 1),
                    ("Articles2 DESC", "Articles2 Content 12", "Articles2 Title", 1, 2),
                    ("Articles3 DESC", "Articles3 Content 13", "Articles3 Title", 2, 3),
+                   ("Articles5 DESC", "Articles5 Content 15", "Articles5 Title", 2, 3),
                    ("Articles4 DESC", "Articles4 Content 14", "Articles4 Title", 3, 1);""".trimIndent())
     }
 
