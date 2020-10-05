@@ -21,7 +21,6 @@ import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.ListRowEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -38,20 +37,22 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private var model: CategoryAndArticle? = null
     private lateinit var category: Category
+    private var categoryPos: Int? = null
 
     private lateinit var binding: ListRowEditBinding
     private val viewModel: MainViewModel by viewModels()
     private var imageRes: Uri? = null
 
+    private val BUNDLE_TTILE = "ui.title"
+    private val BUNDLE_DESC = "ui.desc"
+    private val BUNDLE_CONTENT = "ui.content"
+    private val BUNDLE_SPINER = "ui.spiner.pos"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) =
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         ListRowEditBinding.inflate(layoutInflater, container, false)
             .apply { binding = this }
             .root
@@ -65,44 +66,69 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
             // Select category from current article
             if (model != null) {
-                val pos = list.indexOf(model?.category)
-                binding.spinCategory.setSelection(pos)
+                // Save state on change config
+                if (savedInstanceState == null) {
+                    val pos = list.indexOf(model?.category)
+                    binding.spinCategory.setSelection(pos)
+                } else {
+                    binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINER))
+                }
             }
-
         }
         binding.spinCategory.onItemSelectedListener = this
 
         // Set article data from update View: name, title, desc, image
         // If model exist display  update View with data, else with View empty fields
-        if (model != null) { binding.model = model }
-
-        // Select image
-        val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                binding.imgSelect.setImageURI(uri)
-                imageRes = Uri.parse(uri.toString())
-            }
-        binding.btnImage.setOnClickListener { getContent.launch("image/*") }
-
-        // Bottom navigation save and redirect, save an clear input to add new article
-        binding.bottNav?.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.bot_menu_save -> {
-                    viewModel.saveArticle(getArticle());
-                    redirectTo();
-                    true
-                }
-                R.id.bot_menu_save_new -> {
-                    Log.d(TAG, "onViewCreated: ${getArticle()}"); true
-                }
-                else -> {
-                    false
-                }
+        if (model != null) {
+            // Save state on change config
+            val categoryBundle = model!!.category
+            val articleBundle = model!!.article[0]
+            if (savedInstanceState != null) {
+                binding.model = CategoryAndArticle(categoryBundle, listOf(articleBundle.copy(
+                    title = savedInstanceState.getString(BUNDLE_TTILE)!!,
+                    desc = savedInstanceState.getString(BUNDLE_DESC)!!,
+                    content = savedInstanceState.getString(BUNDLE_CONTENT)!!,
+                )))
+            } else {
+                binding.model = model
             }
         }
-        val tsLong = System.currentTimeMillis()
+
+            // Select image
+            val getContent =
+                registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                    binding.imgSelect.setImageURI(uri)
+                    imageRes = Uri.parse(uri.toString())
+                }
+            binding.btnImage.setOnClickListener { getContent.launch("image/*") }
+
+            // Bottom navigation save and redirect, save an clear input to add new article
+            binding.bottNav.setOnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.bot_menu_save -> {
+                        viewModel.saveArticle(getArticle());
+                        redirectTo();
+                        true
+                    }
+                    R.id.bot_menu_save_new -> {
+//                    Log.d(TAG, "onViewCreated: ${getArticle()}");
+                        true
+                    }
+                    else -> {
+                        false
+                    }
+                }
+            }
+
     }
 
-    fun test(value: Log) = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(value)
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(BUNDLE_TTILE, binding.edtTitle.text.toString())
+        outState.putString(BUNDLE_DESC, binding.edtDesc.text.toString())
+        outState.putString(BUNDLE_CONTENT, binding.edtContent.text.toString())
+        outState.putInt(BUNDLE_SPINER, binding.spinCategory.id)
+    }
 
     private fun redirectTo() {
         requireActivity().supportFragmentManager.commit {

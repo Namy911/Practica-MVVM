@@ -38,7 +38,7 @@ class DisplayArticleFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("EditArticleFragment", "onViewCreated: ${resources.getIdentifier("l11", "drawable", context?.packageName)}")
+//        Log.d("EditArticleFragment", "onViewCreated: ${resources.getIdentifier("l11", "drawable", context?.packageName)}")
         val article = requireArguments().getParcelable<Article>(ARTICLE_MODEL)
         viewModel.laodCategory(article!!.categoryId)
         viewModel.category.observe(viewLifecycleOwner, { binding.model = CategoryAndArticle(it, listOf(article)) })

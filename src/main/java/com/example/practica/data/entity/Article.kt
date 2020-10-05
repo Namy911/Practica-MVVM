@@ -38,7 +38,7 @@ import java.util.*
 @Parcelize
 data class Article(
     @ColumnInfo(name = ROW_TITLE)
-    val title: String,
+    var title: String,
 
     @ColumnInfo(name = ROW_DESC)
     val desc: String,
