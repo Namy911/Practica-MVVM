@@ -15,7 +15,7 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
+        android:id="@+id/container_display"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -118,7 +118,7 @@
             android:id="@+id/bott_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/container"
+            android:layout_below="@+id/container_display"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

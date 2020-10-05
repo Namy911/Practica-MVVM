@@ -21,6 +21,8 @@ import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.ListRowEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @AndroidEntryPoint
@@ -28,10 +30,9 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     companion object {
         private const val TAG = "EditArticleFragment"
         private const val MODEL_CATEGORY_ARTICLE = "ui.main.model.category.article"
-        private const val ARTICLE_ID = "ui.mai.article.id"
 
         fun newInstance(model: CategoryAndArticle?) = EditArticleFragment().apply {
-            arguments = bundleOf(MODEL_CATEGORY_ARTICLE  to model)
+            arguments = bundleOf(MODEL_CATEGORY_ARTICLE to model)
         }
     }
 
@@ -40,6 +41,11 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private lateinit var binding: ListRowEditBinding
     private val viewModel: MainViewModel by viewModels()
+    private var imageRes: Uri? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +63,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // Set spinner with all categories
         viewModel.categories.observe(viewLifecycleOwner) { list ->
             binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
-            // Select category from article lis
+            // Select category from current article
             if (model != null) {
                 val pos = list.indexOf(model?.category)
                 binding.spinCategory.setSelection(pos)
@@ -67,12 +73,13 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.spinCategory.onItemSelectedListener = this
 
         // Set article data from update View: name, title, desc, image
-        // If model exist display  update View, else insert View
+        // If model exist display  update View with data, else with View empty fields
         if (model != null) { binding.model = model }
 
         // Select image
         val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
                 binding.imgSelect.setImageURI(uri)
+                imageRes = Uri.parse(uri.toString())
             }
         binding.btnImage.setOnClickListener { getContent.launch("image/*") }
 
@@ -81,9 +88,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
             when (item.itemId) {
                 R.id.bot_menu_save -> {
                     viewModel.saveArticle(getArticle());
-                    requireActivity().supportFragmentManager.commit {
-                        replace(R.id.container, MainFragment.newInstance())
-                    }
+                    redirectTo();
                     true
                 }
                 R.id.bot_menu_save_new -> {
@@ -94,17 +99,42 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 }
             }
         }
+        val tsLong = System.currentTimeMillis()
+    }
+
+    fun test(value: Log) = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(value)
+
+    private fun redirectTo() {
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.container_display, MainFragment.newInstance())
+        }
     }
 
     // Setup Article model
-    private fun getArticle() = Article(
-        binding.edtTitle.text.toString(),
-        binding.edtDesc.text.toString(),
-        binding.edtContent.text.toString(),
-        1,
-        category.id,
-        binding.model!!.article[0].id
-    )
+    private fun getArticle(): Article {
+        return if(model != null) {
+            val model = binding.model!!.article[0]
+            model.copy(
+                title = binding.edtTitle.text.toString(),
+                desc = binding.edtDesc.text.toString(),
+                img = "2131230840",
+                date = Date(1601640251700),
+                content = binding.edtContent.text.toString(),
+                userId = 1,
+                categoryId = category.id
+            )
+        }else{
+            Article(
+                binding.edtTitle.text.toString(),
+                binding.edtDesc.text.toString(),
+                imageRes.toString(),
+                Date(System.currentTimeMillis()),
+                binding.edtContent.text.toString(),
+                1,
+                category.id
+            )
+        }
+    }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         category = parent?.getItemAtPosition(position) as Category

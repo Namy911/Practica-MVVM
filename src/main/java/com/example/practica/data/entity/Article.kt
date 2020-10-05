@@ -6,13 +6,16 @@ import androidx.room.*
 import com.example.practica.data.db.TaskSchema
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_CATEGORY_ID
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_CONTENT
+import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_DATE
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_DESC
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_ID
+import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_IMG
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_TITLE
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.ROW_USER_ID
 import com.example.practica.data.db.TaskSchema.ArticlesTable.Companion.TABLE_NAME
 import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 @Entity(
     tableName = TABLE_NAME,
@@ -35,19 +38,25 @@ import kotlinx.coroutines.flow.Flow
 @Parcelize
 data class Article(
     @ColumnInfo(name = ROW_TITLE)
-    var title: String,
+    val title: String,
 
     @ColumnInfo(name = ROW_DESC)
-    var desc: String,
+    val desc: String,
+
+    @ColumnInfo(name = ROW_IMG, defaultValue = "2131230840" )
+    val img: String,
+
+    @ColumnInfo(name = ROW_DATE, defaultValue = "1601640082")
+    val date: Date,
 
     @ColumnInfo(name = ROW_CONTENT)
-    var content: String,
+    val content: String,
 
     @ColumnInfo(name = ROW_USER_ID, index = true)
-    var userId: Int,
+    val userId: Int,
 
     @ColumnInfo(name = ROW_CATEGORY_ID, index = true)
-    var categoryId: Int,
+    val categoryId: Int,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ROW_ID)
@@ -65,7 +74,7 @@ data class Article(
         @Delete
         suspend fun delete(article: Article)
 
-        @Query("SELECT * FROM `articles` WHERE `art_id` = :id")
+        @Query("SELECT * FROM $TABLE_NAME WHERE $ROW_ID = :id")
         fun loadArticle(id: Int ): LiveData<Article>
 
 

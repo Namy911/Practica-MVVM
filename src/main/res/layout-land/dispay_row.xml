@@ -31,6 +31,8 @@
 
                 <ImageView
                     android:id="@+id/img_article"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="image"
@@ -41,25 +43,28 @@
                     android:id="@+id/txt_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/img_article"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="24dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:paddingBottom="16dp"
                     android:text="@{model.category.name}" />
 
                 <TextView
                     android:id="@+id/txt_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/img_article"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_toEndOf="@id/txt_category" />
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="24dp"
+                    android:paddingBottom="16dp"
+                    android:layout_toRightOf="@id/txt_category" />
 
                 <TextView
                     android:id="@+id/txt_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/txt_category"
+                    android:layout_toEndOf="@id/img_article"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="@{model.article[0].title}"
@@ -69,11 +74,11 @@
                     android:id="@+id/txt_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/img_article"
                     android:layout_below="@id/txt_title"
-                    android:layout_margin="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="8dp"
                     android:gravity="center"
                     android:lines="3"
@@ -85,10 +90,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@id/txt_desc"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_toEndOf="@id/img_article"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@{model.article[0].content}" />
 
 

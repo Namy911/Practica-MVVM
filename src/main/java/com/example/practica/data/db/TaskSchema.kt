@@ -24,12 +24,14 @@ sealed class TaskSchema {
     class ArticlesTable{
         companion object{
             const val TABLE_NAME = "articles"
-            const val ROW_TITLE = "art_title"
-            const val ROW_DESC = "art_desc"
+            const val ROW_TITLE = "title"
+            const val ROW_DESC = "desc"
+            const val ROW_IMG = "img"
+            const val ROW_DATE= "date"
             const val ROW_CONTENT = "content"
             const val ROW_CATEGORY_ID = "category_id"
             const val ROW_USER_ID = "user_id"
-            const val ROW_ID = "art_id"
+            const val ROW_ID = "_id"
         }
     }
 }

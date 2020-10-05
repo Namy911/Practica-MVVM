@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Parcelize
 data class User(
     @ColumnInfo(name = ROW_NAME)
-    var name: String,
+    val name: String,
 
     @ColumnInfo(name = ROW_AGE)
-    var age: Int,
+    val age: Int,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ROW_ID, index = true)

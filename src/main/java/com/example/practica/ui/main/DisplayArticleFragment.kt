@@ -1,6 +1,7 @@
 package com.example.practica.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,8 @@ import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.DispayRowBinding
 import dagger.hilt.android.AndroidEntryPoint
+import java.text.SimpleDateFormat
+import java.util.*
 
 @AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
@@ -35,10 +38,12 @@ class DisplayArticleFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("EditArticleFragment", "onViewCreated: ${resources.getIdentifier("l11", "drawable", context?.packageName)}")
         val article = requireArguments().getParcelable<Article>(ARTICLE_MODEL)
         viewModel.laodCategory(article!!.categoryId)
         viewModel.category.observe(viewLifecycleOwner, { binding.model = CategoryAndArticle(it, listOf(article)) })
+
+        binding.txtDate.text = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(article.date)
 
         binding.botNavDisplay.setOnNavigationItemSelectedListener{ item ->
             when(item.itemId){
@@ -55,13 +60,13 @@ class DisplayArticleFragment: Fragment() {
         viewModel.deleteArticle(binding.model!!.article[0])
         Toast.makeText(context, "deleted", Toast.LENGTH_SHORT).show()
         requireActivity().supportFragmentManager.commit {
-            replace(R.id.container, MainFragment.newInstance())
+            replace(R.id.container_display, MainFragment.newInstance())
         }
     }
 
     private fun updateArticle(){
         requireActivity().supportFragmentManager.commit {
-            replace(R.id.container, EditArticleFragment.newInstance(binding.model!!))
+            replace(R.id.container_display, EditArticleFragment.newInstance(binding.model!!))
         }
     }
 }

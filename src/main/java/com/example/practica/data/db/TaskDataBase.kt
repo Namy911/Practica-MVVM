@@ -2,6 +2,8 @@ package com.example.practica.data.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.practica.data.db.TaskSchema.UserTable.Companion.ROW_AGE
 import com.example.practica.data.db.TaskSchema.UserTable.Companion.ROW_NAME
@@ -9,7 +11,8 @@ import com.example.practica.data.db.TaskSchema.UserTable.Companion.TABLE_NAME
 import com.example.practica.data.entity.*
 
 
-@Database(entities = [User::class, Article::class, Category::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Article::class, Category::class], version = 2, exportSchema = false)
+@TypeConverters(Converters::class)
 abstract class TaskDataBase: RoomDatabase(){
 
     abstract fun userSore(): User.Store

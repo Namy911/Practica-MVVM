@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 @Parcelize
 data class Category(
     @ColumnInfo(name = ROW_NAME)
-    var name: String,
+    val name: String,
 
     @ColumnInfo(name = ROW_DESC)
-    var desc: String,
+    val desc: String,
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ROW_ID, index = true)

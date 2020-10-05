@@ -106,6 +106,7 @@ class MainViewModel @ViewModelInject constructor(
     }
 
     // Create correct list 1:1 (category:article)
+    //************************************
     private fun setListCategoryArticles(item: List<CategoryAndArticle>): MutableList<CategoryAndArticle> {
         val result = mutableListOf<CategoryAndArticle>()
         item.forEach {
