@@ -1,20 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-        <variable
-            name="model"
-            type="com.example.practica.data.entity.CategoryAndArticle" />
-
-        <variable
-            name="callback"
-            type="com.example.practica.ui.main.EditArticleFragment" />
-    </data>
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/container_display"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,7 +29,6 @@
             android:gravity="center"
             android:hint="@string/hint_title"
             android:inputType="textPersonName"
-            android:text="@{ model.article[0].title }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +77,6 @@
             android:hint="desc"
             android:inputType="textMultiLine"
             android:lines="2"
-            android:text="@{model.article[0].desc}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +94,6 @@
             android:gravity="start|top"
             android:hint="@string/app_name"
             android:inputType="textMultiLine"
-            android:text="@{model.article[0].content}"
             app:layout_constraintBottom_toTopOf="@+id/bott_nav"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,4 +109,3 @@
             app:layout_constraintStart_toStartOf="parent"
             app:menu="@menu/bottom_menu_save" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>

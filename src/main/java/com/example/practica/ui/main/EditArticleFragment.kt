@@ -19,19 +19,17 @@ import com.example.practica.data.entity.Category
 import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.ListRowEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.list_row_edit.*
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
 import java.util.*
 
 
 @AndroidEntryPoint
-class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItemSelectedListener {
     companion object {
         private const val TAG = "EditArticleFragment"
         private const val MODEL_CATEGORY_ARTICLE = "ui.main.model.category.article"
 
-        private const val BUNDLE_TITLE = "ui.main.title"
-        private const val BUNDLE_DESC = "ui.main.desc"
-        private const val BUNDLE_CONTENT = "ui.main.content"
         private const val BUNDLE_SPINNER = "ui.main.spinner.pos"
 
         fun newInstance(model: CategoryAndArticle?) = EditArticleFragment().apply {
@@ -43,20 +41,8 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var category: Category
     private var categoryPos: Int? = null
 
-    private lateinit var binding: ListRowEditBinding
     private val viewModel: MainViewModel by viewModels()
     private var imageRes: Uri? = null
-
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        ListRowEditBinding.inflate(layoutInflater, container, false)
-            .apply { binding = this }
-            .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,39 +50,40 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         // Set spinner with all categories
         viewModel.categories.observe(viewLifecycleOwner) { list ->
-            binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
-            // Select category from current article
+            spin_category.adapter = SpinnerCategoryAdapter(requireContext(), list)
+            // Set default category from update view
             if (model != null) {
-                // Save state on change config and set default category from update view
-                if (savedInstanceState == null) {
                     val pos = list.indexOf(model?.category)
-                    binding.spinCategory.setSelection(pos)
+                    spin_category.setSelection(pos)
 //                    binding.spinCategory.setSelection(categoryPos!!)
-                } else {
-                    binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
                 }
-            }
             // Save state on change config from spinner in save view
             if (savedInstanceState != null) {
-                binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
+                spin_category.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
             }
         }
-        binding.spinCategory.onItemSelectedListener = this
+        spin_category.onItemSelectedListener = this
 
         // Set article data from update View: name, title, desc, image
         // If model exist display  update View with data, else with View empty fields
-        if (model != null) { binding.model = model }
+        if (model != null) {
+            val article = model!!.article[0]
+            edt_title.setText(article.title)
+            edt_desc.setText(article.desc)
+            edt_content.setText(article.content)
+            img_select.setImageResource(R.drawable.l11)
+        }
 
             // Select image
             val getContent =
                 registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                    binding.imgSelect.setImageURI(uri)
-                    imageRes = Uri.parse(uri.toString())
+                    img_select.setImageURI(uri)
+                    imageRes = uri
                 }
-            binding.btnImage.setOnClickListener { getContent.launch("image/*") }
+        img_select.setOnClickListener { getContent.launch("image/*") }
 
             // Bottom navigation save and redirect, save an clear input to add new article
-            binding.bottNav.setOnNavigationItemSelectedListener { item ->
+            bott_nav.setOnNavigationItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.bot_menu_save -> {
                         viewModel.saveArticle(getArticle());
@@ -112,34 +99,9 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     }
                 }
             }
-
-    }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        if (savedInstanceState != null) {
-            // Save state from update view, setup with article model inputs
-            if(binding.model != null) {
-                val categoryBundle = model!!.category
-                val articleBundle = model!!.article[0]
-                binding.model = CategoryAndArticle(
-                    categoryBundle, listOf(
-                        articleBundle.copy(
-                            title = savedInstanceState.getString(BUNDLE_TITLE)!!,
-                            desc = savedInstanceState.getString(BUNDLE_DESC)!!,
-                            content = savedInstanceState.getString(BUNDLE_CONTENT)!!,
-                        )
-                    )
-                )
-            }
-        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(BUNDLE_TITLE, binding.edtTitle.text.toString())
-        outState.putString(BUNDLE_DESC, binding.edtDesc.text.toString())
-        outState.putString(BUNDLE_CONTENT, binding.edtContent.text.toString())
         outState.putInt(BUNDLE_SPINNER, categoryPos!!)
     }
 
@@ -152,23 +114,21 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // Setup Article model null = save, null != update
     private fun getArticle(): Article {
         return if(model != null) {
-            val model = binding.model!!.article[0]
+            val model = model!!.article[0]
             model.copy(
-                title = binding.edtTitle.text.toString(),
-                desc = binding.edtDesc.text.toString(),
+                title = edt_title.text.toString(),
+                desc = edt_desc.text.toString(),
                 img = "2131230840",
-                date = Date(1601640251700),
-                content = binding.edtContent.text.toString(),
-                userId = 1,
+                content = edt_content.text.toString(),
                 categoryId = category.id
             )
         }else{
             Article(
-                binding.edtTitle.text.toString(),
-                binding.edtDesc.text.toString(),
+                edt_title.text.toString(),
+                edt_desc.text.toString(),
                 "2131230840",
                 Date(System.currentTimeMillis()),
-                binding.edtContent.text.toString(),
+                edt_content.text.toString(),
                 1,
                 category.id
             )
@@ -176,8 +136,8 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        category = parent?.getItemAtPosition(position) as Category
-        categoryPos = position
+        category = parent?.getItemAtPosition(position) as Category // from setup model Article -> categoryId
+        categoryPos = position // from spinner: position from selected category on update and  restore on conf. change
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}
