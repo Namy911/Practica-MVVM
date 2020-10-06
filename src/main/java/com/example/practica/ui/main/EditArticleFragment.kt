@@ -3,7 +3,6 @@ package com.example.practica.ui.main
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,11 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         private const val TAG = "EditArticleFragment"
         private const val MODEL_CATEGORY_ARTICLE = "ui.main.model.category.article"
 
+        private const val BUNDLE_TITLE = "ui.main.title"
+        private const val BUNDLE_DESC = "ui.main.desc"
+        private const val BUNDLE_CONTENT = "ui.main.content"
+        private const val BUNDLE_SPINNER = "ui.main.spinner.pos"
+
         fun newInstance(model: CategoryAndArticle?) = EditArticleFragment().apply {
             arguments = bundleOf(MODEL_CATEGORY_ARTICLE to model)
         }
@@ -43,10 +47,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private val viewModel: MainViewModel by viewModels()
     private var imageRes: Uri? = null
 
-    private val BUNDLE_TTILE = "ui.title"
-    private val BUNDLE_DESC = "ui.desc"
-    private val BUNDLE_CONTENT = "ui.content"
-    private val BUNDLE_SPINER = "ui.spiner.pos"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,33 +67,25 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.spinCategory.adapter = SpinnerCategoryAdapter(requireContext(), list)
             // Select category from current article
             if (model != null) {
-                // Save state on change config
+                // Save state on change config and set default category from update view
                 if (savedInstanceState == null) {
                     val pos = list.indexOf(model?.category)
                     binding.spinCategory.setSelection(pos)
+//                    binding.spinCategory.setSelection(categoryPos!!)
                 } else {
-                    binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINER))
+                    binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
                 }
+            }
+            // Save state on change config from spinner in save view
+            if (savedInstanceState != null) {
+                binding.spinCategory.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
             }
         }
         binding.spinCategory.onItemSelectedListener = this
 
         // Set article data from update View: name, title, desc, image
         // If model exist display  update View with data, else with View empty fields
-        if (model != null) {
-            // Save state on change config
-            val categoryBundle = model!!.category
-            val articleBundle = model!!.article[0]
-            if (savedInstanceState != null) {
-                binding.model = CategoryAndArticle(categoryBundle, listOf(articleBundle.copy(
-                    title = savedInstanceState.getString(BUNDLE_TTILE)!!,
-                    desc = savedInstanceState.getString(BUNDLE_DESC)!!,
-                    content = savedInstanceState.getString(BUNDLE_CONTENT)!!,
-                )))
-            } else {
-                binding.model = model
-            }
-        }
+        if (model != null) { binding.model = model }
 
             // Select image
             val getContent =
@@ -122,12 +115,32 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     }
 
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            // Save state from update view, setup with article model inputs
+            if(binding.model != null) {
+                val categoryBundle = model!!.category
+                val articleBundle = model!!.article[0]
+                binding.model = CategoryAndArticle(
+                    categoryBundle, listOf(
+                        articleBundle.copy(
+                            title = savedInstanceState.getString(BUNDLE_TITLE)!!,
+                            desc = savedInstanceState.getString(BUNDLE_DESC)!!,
+                            content = savedInstanceState.getString(BUNDLE_CONTENT)!!,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(BUNDLE_TTILE, binding.edtTitle.text.toString())
+        outState.putString(BUNDLE_TITLE, binding.edtTitle.text.toString())
         outState.putString(BUNDLE_DESC, binding.edtDesc.text.toString())
         outState.putString(BUNDLE_CONTENT, binding.edtContent.text.toString())
-        outState.putInt(BUNDLE_SPINER, binding.spinCategory.id)
+        outState.putInt(BUNDLE_SPINNER, categoryPos!!)
     }
 
     private fun redirectTo() {
@@ -136,7 +149,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    // Setup Article model
+    // Setup Article model null = save, null != update
     private fun getArticle(): Article {
         return if(model != null) {
             val model = binding.model!!.article[0]
@@ -153,7 +166,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
             Article(
                 binding.edtTitle.text.toString(),
                 binding.edtDesc.text.toString(),
-                imageRes.toString(),
+                "2131230840",
                 Date(System.currentTimeMillis()),
                 binding.edtContent.text.toString(),
                 1,
@@ -164,6 +177,7 @@ class EditArticleFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         category = parent?.getItemAtPosition(position) as Category
+        categoryPos = position
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {}

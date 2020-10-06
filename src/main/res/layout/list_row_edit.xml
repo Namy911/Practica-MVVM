@@ -41,7 +41,7 @@
             android:gravity="center"
             android:hint="@string/hint_title"
             android:inputType="textPersonName"
-            android:text="@{model.article[0].title}"
+            android:text="@{ model.article[0].title }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
