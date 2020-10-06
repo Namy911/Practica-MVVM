@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/displayArticleFragment"
+        android:name="com.example.practica.ui.main.DisplayArticleFragment"
+        android:label="DisplayArticleFragment" >
+        <action
+            android:id="@+id/action_updateArticle"
+            app:destination="@id/editArticleFragment" />
+        <argument
+            android:name="article"
+            app:argType="com.example.practica.data.entity.Article" />
+    </fragment>
+    <fragment
+        android:id="@+id/editArticleFragment"
+        android:name="com.example.practica.ui.main.EditArticleFragment"
+        android:label="Edit Article" >
+        <argument
+            android:name="model"
+            app:argType="com.example.practica.data.entity.CategoryAndArticle"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.practica.ui.main.MainFragment"
+        android:label="Main Fragment"
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_displayArticle"
+            app:destination="@id/displayArticleFragment" />
+        <action
+            android:id="@+id/action_addArticle"
+            app:destination="@id/editArticleFragment" />
+    </fragment>
+
+</navigation>

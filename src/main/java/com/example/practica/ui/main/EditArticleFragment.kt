@@ -13,6 +13,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.practica.R
 import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.Category
@@ -28,35 +30,30 @@ import java.util.*
 class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItemSelectedListener {
     companion object {
         private const val TAG = "EditArticleFragment"
-        private const val MODEL_CATEGORY_ARTICLE = "ui.main.model.category.article"
-
         private const val BUNDLE_SPINNER = "ui.main.spinner.pos"
-
-        fun newInstance(model: CategoryAndArticle?) = EditArticleFragment().apply {
-            arguments = bundleOf(MODEL_CATEGORY_ARTICLE to model)
-        }
     }
 
-    private var model: CategoryAndArticle? = null
     private lateinit var category: Category
     private var categoryPos: Int? = null
-
-    private val viewModel: MainViewModel by viewModels()
     private var imageRes: Uri? = null
+
+    private var model: CategoryAndArticle? = null
+    private val args: EditArticleFragmentArgs by navArgs()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model = arguments?.getParcelable(MODEL_CATEGORY_ARTICLE)
+        model = args.model
 
         // Set spinner with all categories
         viewModel.categories.observe(viewLifecycleOwner) { list ->
             spin_category.adapter = SpinnerCategoryAdapter(requireContext(), list)
             // Set default category from update view
             if (model != null) {
-                    val pos = list.indexOf(model?.category)
-                    spin_category.setSelection(pos)
+                val pos = list.indexOf(model?.category)
+                spin_category.setSelection(pos)
 //                    binding.spinCategory.setSelection(categoryPos!!)
-                }
+            }
             // Save state on change config from spinner in save view
             if (savedInstanceState != null) {
                 spin_category.setSelection(savedInstanceState.getInt(BUNDLE_SPINNER))
@@ -74,42 +71,38 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             img_select.setImageResource(R.drawable.l11)
         }
 
-            // Select image
-            val getContent =
-                registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                    img_select.setImageURI(uri)
-                    imageRes = uri
-                }
+        // Select image
+        val getContent =
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                img_select.setImageURI(uri)
+                imageRes = uri
+            }
         img_select.setOnClickListener { getContent.launch("image/*") }
 
-            // Bottom navigation save and redirect, save an clear input to add new article
-            bott_nav.setOnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.bot_menu_save -> {
-                        viewModel.saveArticle(getArticle());
-                        redirectTo();
-                        true
-                    }
-                    R.id.bot_menu_save_new -> {
+        // Bottom navigation save and redirect, save an clear input to add new article
+        bott_nav.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.bot_menu_save -> {
+                    viewModel.saveArticle(getArticle());
+                    redirectTo();
+                    true
+                }
+                R.id.bot_menu_save_new -> {
 //                    Log.d(TAG, "onViewCreated: ${getArticle()}");
-                        true
-                    }
-                    else -> {
-                        false
-                    }
+                    true
+                }
+                else -> {
+                    false
                 }
             }
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(BUNDLE_SPINNER, categoryPos!!)
     }
 
-    private fun redirectTo() {
-        requireActivity().supportFragmentManager.commit {
-            replace(R.id.container_display, MainFragment.newInstance())
-        }
-    }
+    private fun redirectTo() { findNavController().popBackStack() }
 
     // Setup Article model null = save, null != update
     private fun getArticle(): Article {

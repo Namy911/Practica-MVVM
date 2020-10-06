@@ -10,6 +10,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.practica.R
 import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.CategoryAndArticle
@@ -20,14 +22,12 @@ import java.util.*
 
 @AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
-
     companion object {
         const val ARTICLE_MODEL = "ui.main.article.model"
         const val CATEGORY_ID = "ui.main.category.id"
-
-        fun newInstance(article: Article) = DisplayArticleFragment()
-            .apply { arguments = bundleOf(ARTICLE_MODEL to article) }
     }
+
+    private  val args: DisplayArticleFragmentArgs by navArgs()
     lateinit var binding: DispayRowBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -38,9 +38,8 @@ class DisplayArticleFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Log.d("EditArticleFragment", "onViewCreated: ${resources.getIdentifier("l11", "drawable", context?.packageName)}")
-        val article = requireArguments().getParcelable<Article>(ARTICLE_MODEL)
-        viewModel.laodCategory(article!!.categoryId)
+        val article = args.article
+        viewModel.laodCategory(article.categoryId)
         viewModel.category.observe(viewLifecycleOwner, { binding.model = CategoryAndArticle(it, listOf(article)) })
 
         binding.txtDate.text = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(article.date)
@@ -59,14 +58,12 @@ class DisplayArticleFragment: Fragment() {
     private fun deleteArticle(){
         viewModel.deleteArticle(binding.model!!.article[0])
         Toast.makeText(context, "deleted", Toast.LENGTH_SHORT).show()
-        requireActivity().supportFragmentManager.commit {
-            replace(R.id.container_display, MainFragment.newInstance())
-        }
+        findNavController().popBackStack()
     }
 
     private fun updateArticle(){
-        requireActivity().supportFragmentManager.commit {
-            replace(R.id.container_display, EditArticleFragment.newInstance(binding.model!!))
-        }
+        findNavController().navigate(
+            DisplayArticleFragmentDirections.actionUpdateArticle(binding.model!!)
+        )
     }
 }

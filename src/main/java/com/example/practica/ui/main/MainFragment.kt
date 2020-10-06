@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -21,22 +24,21 @@ import java.util.*
 @AndroidEntryPoint
 class MainFragment : Fragment(R.layout.main_fragment) {
     companion object {
-        fun newInstance() = MainFragment()
         private const val TAG = "MainFragment"
     }
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by navGraphViewModels(R.id.nav_graph) { defaultViewModelProviderFactory }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = RosterAdapter(){
-            activity?.supportFragmentManager?.commit {
-                replace(R.id.container_display, DisplayArticleFragment.newInstance(it))
-            }
+            findNavController().navigate(
+                MainFragmentDirections.actionDisplayArticle(it)
+            )
         }
-        list_container.adapter = adapter
 
+        list_container.adapter = adapter
         viewModel.listUsersAndArticle.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list.sortedBy { it.article[0].id })
             if (list.isEmpty()){
@@ -45,9 +47,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         }
 
         fb_add_article.setOnClickListener {
-            activity?.supportFragmentManager?.commit {
-                replace(R.id.container_display, EditArticleFragment.newInstance(null))
-            }
+            findNavController().navigate(
+                MainFragmentDirections.actionAddArticle(null)
+            )
         }
     }
     inner class RosterAdapter(private val action: (Article) -> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
