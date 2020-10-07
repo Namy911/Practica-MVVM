@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/displayArticleFragment"
         android:name="com.example.practica.ui.main.DisplayArticleFragment"
-        android:label="DisplayArticleFragment" >
+        android:label="@string/nav_display_fragment" >
         <action
             android:id="@+id/action_updateArticle"
             app:destination="@id/editArticleFragment" />
@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/editArticleFragment"
         android:name="com.example.practica.ui.main.EditArticleFragment"
-        android:label="Edit Article" >
+        android:label="@string/nav_save_fragment" >
         <argument
             android:name="model"
             app:argType="com.example.practica.data.entity.CategoryAndArticle"
@@ -28,7 +28,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.practica.ui.main.MainFragment"
-        android:label="Main Fragment"
+        android:label="@string/nav_main_fragment"
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_displayArticle"

@@ -1,19 +1,15 @@
 package com.example.practica.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.practica.R
-import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.CategoryAndArticle
 import com.example.practica.databinding.DispayRowBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,10 +18,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
-    companion object {
-        const val ARTICLE_MODEL = "ui.main.article.model"
-        const val CATEGORY_ID = "ui.main.category.id"
-    }
 
     private  val args: DisplayArticleFragmentArgs by navArgs()
     lateinit var binding: DispayRowBinding

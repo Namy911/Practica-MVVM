@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.commit
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.DiffUtil
@@ -52,6 +49,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             )
         }
     }
+
     inner class RosterAdapter(private val action: (Article) -> Unit): ListAdapter<UserAndArticle, RosterHolder>(Diff()){
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RosterHolder {
             return RosterHolder(ListRowBinding.inflate(layoutInflater, parent, false),action)

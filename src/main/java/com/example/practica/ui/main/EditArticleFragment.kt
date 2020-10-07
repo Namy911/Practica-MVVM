@@ -9,9 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,7 +17,6 @@ import com.example.practica.R
 import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.Category
 import com.example.practica.data.entity.CategoryAndArticle
-import com.example.practica.databinding.ListRowEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.list_row_edit.*
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
@@ -35,6 +32,7 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
 
     private lateinit var category: Category
     private var categoryPos: Int? = null
+
     private var imageRes: Uri? = null
 
     private var model: CategoryAndArticle? = null
