@@ -24,20 +24,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/img_article"
+                    android:layout_width="350dp"
+                    android:layout_height="250dp"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:contentDescription="image"
-                    android:scaleType="fitCenter"
-                    app:srcCompat="@drawable/l11" />
+                    android:scaleType="centerCrop" />
 
                 <TextView
                     android:id="@+id/txt_category"

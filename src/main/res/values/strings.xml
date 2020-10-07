@@ -12,4 +12,7 @@
     <string name="nav_main_fragment">Fast News</string>
     <string name="nav_save_fragment">Save Article</string>
     <string name="nav_display_fragment">Article</string>
+    <string name="dialog_requestPerm_msg">Permission to access the Gallery is required</string>
+    <string name="dialog_requestPerm_title">Permission required</string>
+    <string name="dialog_requestPerm_butt_OK">Ok</string>
 </resources>

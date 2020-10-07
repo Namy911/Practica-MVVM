@@ -28,12 +28,11 @@
 
             <ImageView
                 android:id="@+id/img_article"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
                 android:contentDescription="image"
                 android:onClick="@{() -> holder.action.invoke(model.article[0])}"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/l11" />
+                android:scaleType="centerCrop" />
 
             <TextView
                 android:id="@+id/txt_date"

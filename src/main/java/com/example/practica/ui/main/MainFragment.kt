@@ -14,6 +14,7 @@ import com.example.practica.data.entity.Article
 import com.example.practica.data.entity.UserAndArticle
 import com.example.practica.databinding.ListRowBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.list_row_edit.*
 import kotlinx.android.synthetic.main.main_fragment.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -73,7 +74,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             fun bind(model: UserAndArticle){
                 binding.model = model
                 binding.txtDate.text = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(model.article[0].date)
-//                binding.imgArticle.setImageResource(Uri.parse(model.article[0].img)
+                binding.imgArticle.setImageURI(model.article[0].img)
                 binding.holder = this
                 binding.executePendingBindings()
             }

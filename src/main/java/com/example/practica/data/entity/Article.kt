@@ -1,5 +1,6 @@
 package com.example.practica.data.entity
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -43,8 +44,8 @@ data class Article(
     @ColumnInfo(name = ROW_DESC)
     val desc: String,
 
-    @ColumnInfo(name = ROW_IMG, defaultValue = "2131230840" )
-    val img: String,
+    @ColumnInfo(name = ROW_IMG, defaultValue = "content://media/external/images/media/11" )
+    val img: Uri?,
 
     @ColumnInfo(name = ROW_DATE, defaultValue = "1601640082")
     val date: Date,

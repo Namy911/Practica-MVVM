@@ -1,13 +1,17 @@
 package com.example.practica.ui.main
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -66,22 +70,32 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             edt_title.setText(article.title)
             edt_desc.setText(article.desc)
             edt_content.setText(article.content)
-            img_select.setImageResource(R.drawable.l11)
+            img_select.setImageURI(article.img)
+//            img_select.setImageResource(R.drawable.l11)
         }
 
         // Select image
         val getContent =
-            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                img_select.setImageURI(uri)
-                imageRes = uri
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result: ActivityResult ->
+                if(result.resultCode == Activity.RESULT_OK) {
+                    val intent = result.data
+                    img_select.setImageURI(intent?.data)
+                    imageRes = intent?.data
+                }
             }
-        img_select.setOnClickListener { getContent.launch("image/*") }
+        btn_image.setOnClickListener {
+            getContent.launch(
+                Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            )
+        }
 
         // Bottom navigation save and redirect, save an clear input to add new article
         bott_nav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bot_menu_save -> {
-                    viewModel.saveArticle(getArticle());
+                    val article = getArticle()
+                    viewModel.saveArticle(article);
+                    Log.d(TAG, "onViewCreated: ${article.img}")
                     redirectTo();
                     true
                 }
@@ -109,7 +123,7 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             model.copy(
                 title = edt_title.text.toString(),
                 desc = edt_desc.text.toString(),
-                img = "2131230840",
+                img = imageRes,
                 content = edt_content.text.toString(),
                 categoryId = category.id
             )
@@ -117,7 +131,7 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             Article(
                 edt_title.text.toString(),
                 edt_desc.text.toString(),
-                "2131230840",
+                imageRes,
                 Date(System.currentTimeMillis()),
                 edt_content.text.toString(),
                 1,

@@ -1,6 +1,9 @@
 package com.example.practica.ui.main
 
+import android.content.ContentResolver
+import android.content.ContentUris
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +21,7 @@ import java.util.*
 
 @AndroidEntryPoint
 class DisplayArticleFragment: Fragment() {
-
+    private val TAG = "DisplayArticleFragment"
     private  val args: DisplayArticleFragmentArgs by navArgs()
     lateinit var binding: DispayRowBinding
     private val viewModel: MainViewModel by viewModels()
@@ -32,7 +35,11 @@ class DisplayArticleFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val article = args.article
         viewModel.laodCategory(article.categoryId)
-        viewModel.category.observe(viewLifecycleOwner, { binding.model = CategoryAndArticle(it, listOf(article)) })
+        viewModel.category.observe(viewLifecycleOwner, {
+            binding.model = CategoryAndArticle(it, listOf(article))
+            binding.imgArticle.setImageURI(article.img)
+            Log.d(TAG, "onViewCreated: ${article.img}")
+        })
 
         binding.txtDate.text = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(article.date)
 
@@ -42,9 +49,7 @@ class DisplayArticleFragment: Fragment() {
                 R.id.bot_menu_delete -> {deleteArticle(); true}
                 else -> { false}
             }
-
         }
-
     }
     // Delete an redirect to main screen
     private fun deleteArticle(){

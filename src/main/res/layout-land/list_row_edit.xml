@@ -15,8 +15,7 @@
             android:layout_marginTop="8dp"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/l11" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/edt_title"
