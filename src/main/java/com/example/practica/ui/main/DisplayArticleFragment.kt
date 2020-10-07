@@ -38,7 +38,6 @@ class DisplayArticleFragment: Fragment() {
         viewModel.category.observe(viewLifecycleOwner, {
             binding.model = CategoryAndArticle(it, listOf(article))
             binding.imgArticle.setImageURI(article.img)
-            Log.d(TAG, "onViewCreated: ${article.img}")
         })
 
         binding.txtDate.text = SimpleDateFormat("EEE, dd MMM ''yy", Locale.getDefault()).format(article.date)

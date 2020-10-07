@@ -9,10 +9,12 @@
     <string name="dialog_OK">OK</string>
     <string name="dialog_NO">No</string>
 
-    <string name="nav_main_fragment">Fast News</string>
+    <string name="nav_main_fragment">Hot News</string>
     <string name="nav_save_fragment">Save Article</string>
     <string name="nav_display_fragment">Article</string>
     <string name="dialog_requestPerm_msg">Permission to access the Gallery is required</string>
     <string name="dialog_requestPerm_title">Permission required</string>
     <string name="dialog_requestPerm_butt_OK">Ok</string>
+    <string name="msg_save_article">Article %s save</string>
+    <string name="empty_filed">Empty field please complete</string>
 </resources>

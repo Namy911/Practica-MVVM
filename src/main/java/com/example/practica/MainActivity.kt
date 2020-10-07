@@ -42,13 +42,18 @@ class MainActivity : AppCompatActivity() {
         return navigateUp(findNavController(R.id.nav_host), appBarConfig)
     }
 
+    // Check permission: READ_EXTERNAL_STORAGE
     private fun setupPermissions() {
         val permission = ContextCompat.checkSelfPermission(this,
             Manifest.permission.READ_EXTERNAL_STORAGE)
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
-            Log.i(TAG, "Permission to record denied")
-            makeRequest()
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                dialogRequest()
+            } else {
+                makeRequest()
+            }
         }
     }
 
@@ -57,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
             RECORD_REQUEST_CODE)
     }
+    // Dialog Info about permission
     private fun dialogRequest(){
         val builder = AlertDialog.Builder(this)
         builder.apply {
@@ -74,8 +80,6 @@ class MainActivity : AppCompatActivity() {
             RECORD_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     dialogRequest()
-                } else {
-                    Log.d(TAG, "onRequestPermissionsResult: da")
                 }
             }
         }

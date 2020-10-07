@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import com.example.practica.data.entity.Category
 import com.example.practica.data.entity.CategoryAndArticle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.list_row_edit.*
+import kotlinx.android.synthetic.main.list_row_edit.view.*
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
 import java.util.*
 
@@ -71,47 +73,53 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             edt_desc.setText(article.desc)
             edt_content.setText(article.content)
             img_select.setImageURI(article.img)
-//            img_select.setImageResource(R.drawable.l11)
+            // Delete item menu if display update view
+            bott_nav.menu.removeItem(R.id.bot_menu_save_new)
         }
 
         // Select image
         val getContent =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result: ActivityResult ->
-                if(result.resultCode == Activity.RESULT_OK) {
-                    val intent = result.data
-                    img_select.setImageURI(intent?.data)
-                    imageRes = intent?.data
+            registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+                if (uri != null) {
+                    img_select.setImageURI(uri)
+                    imageRes = uri
                 }
             }
-        btn_image.setOnClickListener {
-            getContent.launch(
-                Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            )
-        }
+        btn_image.setOnClickListener { getContent.launch("image/*") }
 
         // Bottom navigation save and redirect, save an clear input to add new article
         bott_nav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.bot_menu_save -> {
-                    val article = getArticle()
-                    viewModel.saveArticle(article);
-                    Log.d(TAG, "onViewCreated: ${article.img}")
-                    redirectTo();
-                    true
-                }
-                R.id.bot_menu_save_new -> {
-//                    Log.d(TAG, "onViewCreated: ${getArticle()}");
-                    true
-                }
-                else -> {
-                    false
-                }
+                R.id.bot_menu_save -> { saveArticle() }
+                R.id.bot_menu_save_new -> { saveArticle(false) }
+                else -> { false }
             }
         }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putInt(BUNDLE_SPINNER, categoryPos!!)
+    }
+
+    // Save article and redirect or clear input to add new article
+    private fun saveArticle(redirect: Boolean = true): Boolean {
+        if (validation()) {
+            val article = getArticle()
+            viewModel.saveArticle(article)
+            if (redirect) {
+                redirectTo()
+            }
+            else {
+                edt_title.text.clear()
+                edt_desc.text.clear()
+                edt_content.text.clear()
+                img_select.setImageDrawable(resources.getDrawable(R.drawable.l11))//Default image
+            }
+            Toast.makeText(context, getString(R.string.msg_save_article, article.title), Toast.LENGTH_SHORT).show()
+            return true
+        } else {
+            return false
+        }
     }
 
     private fun redirectTo() { findNavController().popBackStack() }
@@ -138,6 +146,14 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
                 category.id
             )
         }
+    }
+    // Check if inputs is completed
+    private fun validation(): Boolean{
+        if (edt_title.text.isEmpty()){ edt_title.error = getString(R.string.empty_filed) }
+        if (edt_desc.text.isEmpty()){ edt_desc.error = getString(R.string.empty_filed) }
+        if (edt_content.text.isEmpty()){ edt_content.error = getString(R.string.empty_filed) }
+
+        return  (edt_title.text.isNotEmpty() && edt_desc.text.isNotEmpty() && edt_content.text.isNotEmpty())
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
