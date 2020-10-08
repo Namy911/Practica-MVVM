@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:card_view="http://schemas.android.com/tools">
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="model"
@@ -13,7 +9,6 @@
             name="holder"
             type="com.example.practica.ui.main.MainFragment.RosterHolder" />
     </data>
-
     <androidx.cardview.widget.CardView
         app:cardBackgroundColor="@color/bg_cardView"
         app:cardCornerRadius="20dp"
@@ -30,7 +25,7 @@
                 android:id="@+id/img_article"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:contentDescription="image"
+                android:contentDescription="@string/image_desc"
                 android:onClick="@{() -> holder.action.invoke(model.article[0])}"
                 android:scaleType="centerCrop" />
 
@@ -41,7 +36,7 @@
                 android:layout_below="@id/img_article"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txt_user"
@@ -51,7 +46,8 @@
                 android:layout_alignEnd="@id/img_article"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="@{model.user.name}" />
+                android:text="@{model.user.name}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txt_title"
@@ -60,6 +56,7 @@
                 android:layout_below="@id/txt_date"
                 android:gravity="center"
                 android:text="@{model.article[0].title}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textSize="24sp" />
 
             <TextView
@@ -67,13 +64,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txt_title"
-                android:layout_margin="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:lines="3"
                 android:text="@{model.article[0].desc}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
                 android:textSize="16sp" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

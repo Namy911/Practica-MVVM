@@ -7,4 +7,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="btn_select_image" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:background"> @drawable/btn_select_img</item>
+        <item name="android:textSize"> @dimen/btn_select_img </item>
+    </style>
+
 </resources>

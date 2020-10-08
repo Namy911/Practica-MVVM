@@ -1,18 +1,14 @@
 package com.example.practica.ui.main
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -24,7 +20,6 @@ import com.example.practica.data.entity.Category
 import com.example.practica.data.entity.CategoryAndArticle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.list_row_edit.*
-import kotlinx.android.synthetic.main.list_row_edit.view.*
 import kotlinx.android.synthetic.main.sppiner_row_category.view.*
 import java.util.*
 
@@ -74,21 +69,34 @@ class EditArticleFragment : Fragment(R.layout.list_row_edit), AdapterView.OnItem
             edt_content.setText(article.content)
             img_select.setImageURI(article.img)
             // Delete item menu if display update view
-            bott_nav.menu.removeItem(R.id.bot_menu_save_new)
+            bottom_nav.menu.removeItem(R.id.bot_menu_save_new)
         }
 
         // Select image
         val getContent =
             registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-                if (uri != null) {
+                uri?.let {
                     img_select.setImageURI(uri)
                     imageRes = uri
                 }
             }
         btn_image.setOnClickListener { getContent.launch("image/*") }
 
+
+//        val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+//            if (result.resultCode == Activity.RESULT_OK) {
+//                val intent = result.data
+//                intent?.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+//
+//                img_select.setImageURI(intent?.data)
+//                imageRes = intent?.data
+//            }
+//        }
+//        btn_image.setOnClickListener { startForResult.launch(Intent(Intent.ACTION_PICK,
+//            MediaStore.Images.Media.EXTERNAL_CONTENT_URI)) }
+
         // Bottom navigation save and redirect, save an clear input to add new article
-        bott_nav.setOnNavigationItemSelectedListener { item ->
+        bottom_nav.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.bot_menu_save -> { saveArticle() }
                 R.id.bot_menu_save_new -> { saveArticle(false) }

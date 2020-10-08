@@ -2,7 +2,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/container_display"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -50,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginTop="6dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1" />
 
@@ -61,8 +61,8 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:text="@string/btn_select_image"
-                android:textSize="12sp"/>
+                style="@style/btn_select_image"
+                android:text="@string/btn_select_image" />
         </LinearLayout>
 
         <EditText
@@ -74,7 +74,7 @@
             android:layout_marginEnd="8dp"
             android:ems="10"
             android:gravity="start|top"
-            android:hint="desc"
+            android:hint="@string/hint_desc"
             android:inputType="textMultiLine"
             android:lines="2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -94,13 +94,13 @@
             android:gravity="start|top"
             android:hint="@string/app_name"
             android:inputType="textMultiLine"
-            app:layout_constraintBottom_toTopOf="@+id/bott_nav"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/edt_desc" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bott_nav"
+            android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/container_display"

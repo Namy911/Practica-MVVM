@@ -44,9 +44,10 @@
                 android:id="@+id/btn_image"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:text="@string/btn_select_image"
-                android:textSize="12sp"
+                style="@style/btn_select_image"
                 tools:layout_marginEnd="16dp" />
 
             <Spinner
@@ -92,7 +93,7 @@
 
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bott_nav"
+            android:id="@+id/bottom_nav"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/container_display"

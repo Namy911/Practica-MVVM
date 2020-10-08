@@ -13,8 +13,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
             android:layout_width="match_parent"
@@ -24,8 +22,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -34,7 +30,7 @@
                     android:id="@+id/img_article"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
-                    android:contentDescription="image"
+                    android:contentDescription="@string/image_desc"
                     android:scaleType="centerCrop" />
 
                 <TextView
@@ -91,11 +87,8 @@
                     android:layout_marginBottom="8dp"
                     android:text="@{model.article[0].content}" />
 
-
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bot_nav_display"
             android:layout_width="match_parent"

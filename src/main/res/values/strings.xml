@@ -17,4 +17,6 @@
     <string name="dialog_requestPerm_butt_OK">Ok</string>
     <string name="msg_save_article">Article %s save</string>
     <string name="empty_filed">Empty field please complete</string>
+    <string name="image_desc">image</string>
+    <string name="hint_desc">Description</string>
 </resources>
